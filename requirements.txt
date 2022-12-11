@@ -8,4 +8,5 @@ munch~=2.5.0
 matplotlib~=3.6.2
 numpy~=1.23.5
 opencv-python~=4.6.0.66
+jupyter~=1.0.0
 umap-learn[plot]~=0.5.3
