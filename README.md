@@ -41,7 +41,9 @@ Run:
 python -m src.eval
 ```
 
-With the checkpoint: ``lightning_logs/version_0/checkpoints/lc-challenge-epoch13-val_acc0.91.ckpt``
+By default, this will find the checkpoint with best ``val_acc`` in the last version in
+``lightning_logs``. For the zipped version of this project, it will use this checkpoint: 
+``lightning_logs/version_0/checkpoints/lc-challenge-epoch13-val_acc0.91.ckpt``
 
 Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
 
