@@ -4,7 +4,19 @@ Fine-tune ResNet variants on the speech commands dataset.
 The ``params.yaml`` config file constains parameters to 
 train with MFCC features using ResNext50 as the backbone.
 
-This configuration achieves ~90.9% accuracy on the test set.
+This configuration achieves ~91.5% accuracy on the test set.
+
+The best checkpoint I've produced so far is:
+
+``lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt``
+
+Not all training runs are the same, sometimes re-running will
+give slightly better / worse performance.
+
+The metrics reported at the very end of train are not for the
+best checkpoint. Once training is done, to get the metrics
+for the best checkpoint - please follow the steps under the
+``Evaluation`` section.
 
 Created by Sebastian Parkitny Dec 2022.
 
