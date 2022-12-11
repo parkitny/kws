@@ -77,32 +77,3 @@ if __name__ == "__main__":
     torch.multiprocessing.set_start_method('forkserver', force=True) # https://github.com/pytorch/pytorch/issues/40403
     # For colab use: https://inside-machinelearning.com/en/how-to-install-use-conda-on-google-colab/
     train()
-
-    '''
-    trainer = pl.Trainer(
-        accelerator=accelerator, # use one GPU
-        max_epochs=params.train.max_epochs, # set number of epochs
-        callbacks=[progress_bar, 
-                   checkpoint_callback],
-    )
-    trainer.fit(model,
-                train_dataloaders=train_dl,
-                val_dataloaders=val_dl,)
-    best_model_path = trainer.checkpoint_callback.best_model_path
-    # Now unfreeze the entire backbone, fine-tune at smaller LR for less epoch.
-
-    for param in model.parameters():
-        param.requires_grad = True
-
-    params.model.optimiser.sgd.lr = params.model.optimiser.sgd.lr / 10
-    # Re-create the model with updated params but weights from last run.
-    model = ResNetMod(params.model)
-    model.load_state_dict(torch.load(best_model_path)['state_dict'])
-    trainer = pl.Trainer(
-        accelerator=accelerator,
-        max_epochs=params.train.max_ft_epochs,
-        callbacks=[progress_bar,
-                    early_stop, 
-                   checkpoint_callback],
-    )
-    '''

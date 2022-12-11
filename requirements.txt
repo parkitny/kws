@@ -7,5 +7,5 @@ dvc~=2.36.0
 munch~=2.5.0
 matplotlib~=3.6.2
 numpy~=1.23.5
-jupyter
-pre-commit
+opencv-python~=4.6.0.66
+umap-learn[plot]~=0.5.3
