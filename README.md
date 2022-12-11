@@ -21,3 +21,4 @@ $ python -m src.eval
 # Visualisation
 $ jupyter-notebook ./exploration
 
+Then open the data-exploration notebook. Run each cell one at a time.
