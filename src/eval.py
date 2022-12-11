@@ -1,29 +1,74 @@
-def number_of_correct(pred, target):
-    # count number of correct predictions
-    return pred.squeeze().eq(target).sum().item()
+import argparse
+import logging
+import sys
+import torch
+import pytorch_lightning as pl
+from pathlib import Path
+from src import data
+from src import constants as C
+from src import configuration
+from src.model import ResNetMod
+
+file_handler = logging.FileHandler(filename='eval.log')
+stdout_handler = logging.StreamHandler(stream=sys.stdout)
+handlers = [file_handler, stdout_handler]
+
+logging.basicConfig(
+    level=logging.DEBUG, 
+    format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+    handlers=handlers
+)
+
+log = logging.getLogger(__file__)
+
+def get_best_model(base_path):
+    # Find the last version
+    last_version = None
+    last_version_path = None
+    for subdir in Path(base_path).glob('*'):
+        version = int(subdir.name.rsplit('_')[-1])
+        if last_version is None or version > last_version:
+            last_version = version
+            last_version_path = subdir
+            
+    # Get the checkpoint
+    best_acc = None
+    best_path = None
+    for ckpt_path in Path(last_version_path /"checkpoints").glob('*.ckpt'):
+        val_acc = float(ckpt_path.stem.rsplit('val_acc')[-1])
+        if best_acc is None or val_acc > best_acc:
+            best_acc = val_acc
+            best_path = ckpt_path
+    return best_path
 
 
-def get_likely_index(tensor):
-    # find most likely label index for each element in the batch
-    return tensor.argmax(dim=-1)
 
+def evaluate(ckpt_path):
+    params = configuration.get_params()
 
-def test(model, epoch, test_loader, device, transform, pbar, pbar_update):
-    model.eval()
-    correct = 0
-    for data, target in test_loader:
+    train_dl, val_dl, test_dl, n_classes = data.get_loaders(params.data)
+    # Inject number of classes into the config, lets us train with other datasets if needed.
+    params.model.n_classes = n_classes
+    # Re-create the model with updated params but weights from last run.
+    model = ResNetMod(params.model)
+    accelerator = C.CPU
+    if params.train.device == C.CUDA:
+        accelerator = C.GPU
+    if ckpt_path is None:
+        try:
+            ckpt_path = get_best_model('lightning_logs')
+        except AttributeError as e:
+            log.error('Unable to find the latest checkpoint, ensure one exists for the last version in lightning logs.')
+    trainer = pl.Trainer(
+        accelerator=accelerator,
+        logger=False
+    )
+    trainer.test(model, test_dl, ckpt_path)
 
-        data = data.to(device)
-        target = target.to(device)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--ckpt_path', nargs='?', type=str, default=None,
+        help="Path to checkpoint for eval, if none - it tries to find latest for last experiment.")
 
-        # apply transform and model on whole batch directly on device
-        data = transform(data)
-        output = model(data)
-
-        pred = get_likely_index(output)
-        correct += number_of_correct(pred, target)
-
-        # update progress bar
-        pbar.update(pbar_update)
-
-    print(f"\nTest Epoch: {epoch}\tAccuracy: {correct}/{len(test_loader.dataset)} ({100. * correct / len(test_loader.dataset):.0f}%)\n")
+    args = parser.parse_args()
+    evaluate(args.ckpt_path)

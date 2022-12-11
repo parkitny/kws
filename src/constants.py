@@ -1,6 +1,12 @@
 CUDA = "cuda"
 CPU = "cpu"
 GPU = "gpu"
+TRAIN="training"
+VAL="validation"
+TEST="test"
 RESNET18 = "resnet18"
 RESNET50 = "resnet50"
+RESNEXT50 = "resnext50"
 DATA_PATH = "./data/raw"
+DEFAULT_SR = 8000
+PARAMS_FN = 'params.yaml'
