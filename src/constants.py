@@ -1,0 +1,6 @@
+CUDA = "cuda"
+CPU = "cpu"
+GPU = "gpu"
+RESNET18 = "resnet18"
+RESNET50 = "resnet50"
+DATA_PATH = "./data/raw"

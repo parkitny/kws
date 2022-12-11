@@ -1,0 +1,35 @@
+train:
+  batch_size: &BATCH_SIZE 256
+  device: &DEVICE 'cuda'
+  max_epochs: 1000
+
+# There is some overlap between Dataset and DataLoader parameters
+# they are all grouped here with explanations.
+data:
+  # Spectrogram parameters
+  n_fft: 400
+  hop_length: 160
+  n_mels: 23
+  img_size: &IMG_SIZE 64
+  mean: 0.5 # This is better than no normalisation. # Could compute for the dataset and use that value here.
+  std: 0.5
+
+  # DataLoader parameters
+  device: *DEVICE
+  batch_size: *BATCH_SIZE
+  num_workers: 4
+  pin_memory: True
+  global_min: 0
+  global_max: 4096
+
+model:
+  resnet_variant: 'resnet50'
+  n_classes: 35 # TODO :Get this from the dataset
+  dropout: 0.4
+  unfreeze_layers: -1
+  img_size: *IMG_SIZE
+  optimiser:
+    sgd:
+      momentum: 0.9
+      weight_decay: 0.0001
+      lr: 0.01
