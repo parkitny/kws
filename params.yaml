@@ -6,7 +6,7 @@ train:
 # There is some overlap between Dataset and DataLoader parameters
 # they are all grouped here with explanations.
 data:
-  # Spectrogram parameters.
+  # MFCC Spectrogram parameters.
   mfcc:
     n_mfcc: 13
   img_size: &IMG_SIZE 64
@@ -19,7 +19,7 @@ data:
   num_workers: 4
   pin_memory: True
   prefetch_factor: 8
-  # Stats for the training dataset, used to scale 0 - 1.
+  # Stats for the training dataset, used to scale spectrograms 0 - 1.
   global_min: -1818
   global_max: 618
 

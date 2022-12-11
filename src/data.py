@@ -6,13 +6,11 @@ import torch
 import torchaudio
 import numpy as np
 from functools import partial
-from logging import getLogger
 from tqdm import tqdm
 from pathlib import Path
 
 from src.configuration import get_params
 import src.constants as C
-log =  getLogger(__file__)
 
 
 def augmentation_transform(img_size, mean, std):
@@ -78,9 +76,9 @@ def get_partial_collate_fn(data_params, labels, transform):
 def get_loaders(data_params, **kwargs):
     # Create training and testing split of the data. We do not use validation in this tutorial.
     Path(C.DATA_PATH).mkdir(parents=True, exist_ok=True)
-    train_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.TRAIN)
-    val_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.VAL)
-    test_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.VAL)
+    train_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.TRAIN, download=True)
+    val_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.VAL, download=True)
+    test_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.VAL, download=True)
 
     labels = sorted(list(set(datapoint[2] for datapoint in train_set)))
     n_classes = len(np.unique(labels))
