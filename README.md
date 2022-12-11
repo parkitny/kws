@@ -23,11 +23,15 @@ conda activate lc
 
 # Training
 
+
 Run:
 
 ```python
 python -m src.train
 ```
+
+NOTE: You'll need ~8GB VRAM to run with this config, if you run out of memory,
+try lowering ``batch_size`` in ``params.yaml``
 
 # Evaluation
 
