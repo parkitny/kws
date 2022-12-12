@@ -33,6 +33,10 @@ conda env create -f environment.yml
 conda activate lc
 ```
 
+the first run of ``train`` and ``eval`` commands will download
+the speech commands dataset, it'll re-use the data for subsequent
+runs.
+
 # Training
 
 
@@ -56,6 +60,17 @@ python -m src.eval
 By default, this will find the checkpoint with best ``val_acc`` in the last version in
 ``lightning_logs``. For the zipped version of this project, it will use this checkpoint: 
 ``lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt``
+
+You should see output similar to this:
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│         test_acc          │    0.9154393076896667     │
+│      test_loss_epoch      │    0.31753432750701904    │
+└───────────────────────────┴───────────────────────────┘
+```
 
 Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
 
