@@ -61,6 +61,17 @@ By default, this will find the checkpoint with best ``val_acc`` in the last vers
 ``lightning_logs``. For the zipped version of this project, it will use this checkpoint: 
 ``lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt``
 
+You should see output similar to this:
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│         test_acc          │    0.9154393076896667     │
+│      test_loss_epoch      │    0.31753432750701904    │
+└───────────────────────────┴───────────────────────────┘
+```
+
 Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
 
 # Visualisation
