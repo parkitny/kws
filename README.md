@@ -33,6 +33,10 @@ conda env create -f environment.yml
 conda activate lc
 ```
 
+the first run of ``train`` and ``eval`` commands will download
+the speech commands dataset, it'll re-use the data for subsequent
+runs.
+
 # Training
 
 
