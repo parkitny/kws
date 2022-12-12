@@ -1,21 +1,15 @@
+import logging
+import sys
 import torch
-from torch import nn
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import RichProgressBar, ModelCheckpoint
 from pytorch_lightning.callbacks.progress.rich_progress import RichProgressBarTheme
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-from torchvision import models
 
-from pathlib import Path
-
-import torchmetrics as tm
 from src import data
 from src import constants as C
 from src import configuration
 from src.model import ResNetMod
-
-import logging
-import sys
 
 file_handler = logging.FileHandler(filename='train.log')
 stdout_handler = logging.StreamHandler(stream=sys.stdout)
@@ -62,8 +56,8 @@ def train():
         )
     )
     trainer = pl.Trainer(
-        accelerator=accelerator, # use one GPU
-        max_epochs=params.train.max_epochs, # set number of epochs
+        accelerator=accelerator, # use one GPU if available
+        max_epochs=params.train.max_epochs,
         callbacks=[progress_bar, 
                    early_stop, 
                    checkpoint_callback],
@@ -75,6 +69,7 @@ def train():
 
     
 if __name__ == "__main__":
-    torch.multiprocessing.set_start_method('forkserver', force=True) # https://github.com/pytorch/pytorch/issues/40403
-    # For colab use: https://inside-machinelearning.com/en/how-to-install-use-conda-on-google-colab/
+    # Avoid issues with num_workers > 1 in dataloader:
+    # https://github.com/pytorch/pytorch/issues/40403
+    torch.multiprocessing.set_start_method('forkserver', force=True)
     train()

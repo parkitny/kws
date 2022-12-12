@@ -1,7 +1,6 @@
 import argparse
 import logging
 import sys
-import torch
 import pytorch_lightning as pl
 from pathlib import Path
 from src import data

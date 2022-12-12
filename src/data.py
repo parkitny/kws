@@ -1,16 +1,15 @@
-from torchaudio.datasets import SPEECHCOMMANDS
-import torchaudio.transforms as AT
-from torchvision.transforms import transforms as VT
-import os
 import torch
 import torchaudio
-import numpy as np
+import torchaudio.transforms as AT
+from torchvision.transforms import transforms as VT
+from torchaudio.datasets import SPEECHCOMMANDS
+
 from functools import partial
 from tqdm import tqdm
 from pathlib import Path
 
-from src.configuration import get_params
 import src.constants as C
+from src.configuration import get_params
 
 
 def augmentation_transform(img_size, mean, std):
@@ -32,7 +31,6 @@ def resize_transform(img_size, mean, std):
         
 def preprocess_sample(waveform, sample_rate, mfcc_kwargs, transform, global_min, global_max):
     # Transform 1D signal to MFCC's, re-sample to 8k to avoid empty filters.
-    #spec_transform = torchaudio.transforms.Spectrogram(n_fft=n_fft) #.to(device)
     _waveform = AT.Resample(orig_freq=sample_rate,new_freq=C.DEFAULT_SR)(waveform)
     spec_transform = torchaudio.transforms.MFCC(
         sample_rate=C.DEFAULT_SR,
@@ -82,7 +80,6 @@ def get_loaders(data_params, data_path=C.DATA_PATH, **kwargs):
     test_set = SPEECHCOMMANDS(root=data_path, subset=C.VAL, download=True)
 
     labels = sorted(list(set(datapoint[2] for datapoint in train_set)))
-    n_classes = len(np.unique(labels))
     augmentations = augmentation_transform(data_params.img_size, data_params.mean, data_params.std)
     resize = resize_transform(data_params.img_size, data_params.mean, data_params.std)
     train_loader = torch.utils.data.DataLoader(

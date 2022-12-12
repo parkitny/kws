@@ -58,7 +58,7 @@ class ResNetMod(pl.LightningModule):
             nn.LeakyReLU(),
             nn.Linear(in_features=512, out_features=256),
             nn.LeakyReLU(),
-            nn.Linear(in_features=256, out_features=self.conf.n_classes), # TODO: Get this n_classes from dataset.
+            nn.Linear(in_features=256, out_features=self.conf.n_classes),
         ]
         self.model.fc = nn.Sequential(
             *top_layers
@@ -71,7 +71,6 @@ class ResNetMod(pl.LightningModule):
             return reversed_layers
         return reversed_layers[:num_layers]
     
-    #@auto_move_data # this decorator automatically handles moving your tensors to GPU if required
     def forward(self, x):
         return self.model(x)
 
@@ -165,7 +164,6 @@ class ResNetMod(pl.LightningModule):
             )
 
         return metrics
-
 
   
     def configure_optimizers(self):

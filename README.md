@@ -88,6 +88,17 @@ jupyter-notebook ./exploration
 Then open the data-exploration notebook. Run each cell one at a time.
 Alternatively, the output is in exploration/data-exploration.html
 
+# Model Analysis
+
+Run: 
+
+```python
+jupyter-notebook ./exploration
+```
+
+Then open the model-analysis notebook. Run each cell one at a time.
+Alternatively, the output is in exploration/model-analysis.html
+
 # Additional Info
 
 The min and max values of the MFCC spectrograms for the training set

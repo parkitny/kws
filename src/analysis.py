@@ -52,7 +52,6 @@ def get_incorrect_predictions(expected,
             logits = model(x.to('cuda'))
             probs = torch.nn.Softmax(dim=1)(logits)
             preds = torch.argmax(probs, axis=1)
-            is_correct = preds == y.to('cuda')
             for sample_idx in range(x.shape[0]):
                 total_sample_idx = batch_idx * params.train.batch_size + sample_idx
                 fp, _, l, *_ = dl.dataset.get_metadata(total_sample_idx)
@@ -63,8 +62,3 @@ def get_incorrect_predictions(expected,
                     labels_to_path.append(fp)
 
     return labels_to_path
-    
-if __name__ == "__main__":
-    inspect_label_names = ['dog', 'go']
-    x = get_incorrect_predictions(expected='go', predicted='no')
-    pass
