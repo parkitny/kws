@@ -59,6 +59,9 @@ By default, this will find the checkpoint with best ``val_acc`` in the last vers
 
 Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
 
+### Confusion Matrix for the above checkpoint
+![plot](./confmat.jpg)
+
 # Visualisation
 
 Run: 

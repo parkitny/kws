@@ -32,7 +32,8 @@ log = logging.getLogger(__file__)
 def train():
     params = configuration.get_params()
 
-    train_dl, val_dl, test_dl, n_classes = data.get_loaders(params.data)
+    train_dl, val_dl, test_dl, labels = data.get_loaders(params.data)
+    n_classes = len(labels)
     # Inject number of classes into the config, lets us train with other datasets if needed.
     params.model.n_classes = n_classes
     model = ResNetMod(params.model)

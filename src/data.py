@@ -112,7 +112,7 @@ def get_loaders(data_params, **kwargs):
         pin_memory=data_params.pin_memory,
         prefetch_factor=data_params.prefetch_factor
     )
-    return train_loader, val_loader, test_loader, n_classes
+    return train_loader, val_loader, test_loader, labels
 
 
 def get_data_min_max(dataloader):

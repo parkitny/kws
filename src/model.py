@@ -1,6 +1,11 @@
 import torch
 import torchmetrics as tm
+import torchmetrics.classification as tmc
 import pytorch_lightning as pl
+import numpy as np
+import seaborn as sn
+import pandas as pd
+import matplotlib.pyplot as plt
 
 from torch import nn
 from torchvision import models
@@ -106,13 +111,62 @@ class ResNetMod(pl.LightningModule):
         x, y = batch
         logits = self(x)
         loss = self.loss(logits, y)
-        self.log('test_acc', self.acc(logits, y), prog_bar=True,
+        test_acc = self.acc(logits, y)
+        self.log('test_acc', test_acc, prog_bar=True,
             on_step=False,
             on_epoch=True)
         self.log('test_loss', loss, prog_bar=True,
             on_step=True,
             on_epoch=True)
-        return loss
+        metrics = {
+            "test_acc": test_acc,
+            "test_loss": loss,
+            "output": logits,
+            "target": y,
+        }
+
+        return metrics
+    
+    @torch.no_grad()
+    def test_epoch_end(self, outputs):
+        # Outputs contain the outputs of all test steps. Can use this to
+        # for example calculate metrics across entire set.
+        _outputs = [
+            {
+                metric: metric_val
+                for metric, metric_val in o.items()
+            }
+            for o in outputs
+        ]
+        logits = torch.concat([o["output"] for o in _outputs], axis=0)
+        probs = torch.nn.Softmax(dim=1)(logits).to('cpu')
+
+        # NOTE: We can obtain the actual class prediction by applying argmax to
+        # the probabilities
+        target = torch.concat([o["target"] for o in _outputs]).to('cpu')
+
+        metrics = {
+            'test_acc': tm.Accuracy(task='multiclass', num_classes=probs.shape[1])(probs, target),
+            'test_f1_score': tmc.MulticlassF1Score(task='multiclass', num_classes=probs.shape[1])(probs, target)
+        }
+        # Plot the confusion matrix and save it as a figure.
+        confmat = tmc.MulticlassConfusionMatrix(task='multiclass', num_classes=probs.shape[1])(probs, target)
+        df_cm = pd.DataFrame(confmat, index =self.conf.labels,
+                  columns=self.conf.labels)
+        self.conf.labels
+        plt.figure(figsize = (15,15))
+        sn.heatmap(df_cm, annot=True)
+        plt.savefig('confmat.png')
+        # To get a print out after eval, need to log the metrics.
+        for metric, metric_val in metrics.items():
+            self.log(
+                metric,
+                metric_val
+            )
+
+        return metrics
+
+
   
     def configure_optimizers(self):
         opt_name = list(self.conf.optimiser)[0]

@@ -46,9 +46,11 @@ def get_best_model(base_path):
 def evaluate(ckpt_path):
     params = configuration.get_params()
 
-    train_dl, val_dl, test_dl, n_classes = data.get_loaders(params.data)
+    _, _, test_dl, labels = data.get_loaders(params.data)
+    n_classes = len(labels)
     # Inject number of classes into the config, lets us train with other datasets if needed.
     params.model.n_classes = n_classes
+    params.model.labels = labels # Used for confusion matrix.
     # Re-create the model with updated params but weights from last run.
     model = ResNetMod(params.model)
     accelerator = C.CPU
