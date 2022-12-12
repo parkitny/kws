@@ -11,3 +11,4 @@ opencv-python~=4.6.0.66
 jupyter~=1.0.0
 umap-learn[plot]~=0.5.3
 seaborn~=0.12.1
+soundfile~=0.11.0

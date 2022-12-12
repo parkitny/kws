@@ -73,12 +73,13 @@ def get_partial_collate_fn(data_params, labels, transform):
             global_max=data_params.global_max,
             mfcc_kwargs=data_params.mfcc)
         
-def get_loaders(data_params, **kwargs):
+        
+def get_loaders(data_params, data_path=C.DATA_PATH, **kwargs):
     # Create training and testing split of the data. We do not use validation in this tutorial.
-    Path(C.DATA_PATH).mkdir(parents=True, exist_ok=True)
-    train_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.TRAIN, download=True)
-    val_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.VAL, download=True)
-    test_set = SPEECHCOMMANDS(root=C.DATA_PATH, subset=C.VAL, download=True)
+    Path(data_path).mkdir(parents=True, exist_ok=True)
+    train_set = SPEECHCOMMANDS(root=data_path, subset=C.TRAIN, download=True)
+    val_set = SPEECHCOMMANDS(root=data_path, subset=C.VAL, download=True)
+    test_set = SPEECHCOMMANDS(root=data_path, subset=C.VAL, download=True)
 
     labels = sorted(list(set(datapoint[2] for datapoint in train_set)))
     n_classes = len(np.unique(labels))
