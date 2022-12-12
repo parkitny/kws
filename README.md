@@ -82,7 +82,7 @@ Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
 Run: 
 
 ```python
-jupyter-notebook ./exploration
+PYTHONPATH=`pwd` jupyter-notebook exploration/
 ```
 
 Then open the data-exploration notebook. Run each cell one at a time.
@@ -93,7 +93,7 @@ Alternatively, the output is in exploration/data-exploration.html
 Run: 
 
 ```python
-jupyter-notebook ./exploration
+PYTHONPATH=`pwd` jupyter-notebook exploration/
 ```
 
 Then open the model-analysis notebook. Run each cell one at a time.
