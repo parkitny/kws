@@ -74,8 +74,8 @@ You should see output similar to this:
 
 Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
 
-### Confusion Matrix for the above checkpoint
-![plot](./confmat.jpg)
+### Confusion Matrix for the above checkpoint:
+[<img src="confmat.png" width="1024"/>](./confmat.png)
 
 # Visualisation
 
