@@ -1,4 +1,4 @@
-name: lc
+name: kws
 channels:
   - conda-forge
 dependencies:

@@ -1,5 +1,5 @@
 train:
-  batch_size: &BATCH_SIZE 512
+  batch_size: &BATCH_SIZE 128
   device: &DEVICE 'cuda'
   max_epochs: 100
 
@@ -32,4 +32,4 @@ model:
     sgd:
       momentum: 0.9
       weight_decay: 0.0001
-      lr: 0.1 # Usually have lower LR, but here 0.1 works well for this problem.
+      lr: 0.01 # Usually have lower LR, but here 0.01 works well for this problem.

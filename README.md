@@ -4,11 +4,16 @@ Fine-tune ResNet variants on the speech commands dataset.
 The ``params.yaml`` config file constains parameters to 
 train with MFCC features using ResNext50 as the backbone.
 
+[Download the checkpoints from here](https://mega.nz/file/0ekWGYqB#JdX9q5U1L87bxwwe3fzdkgz_bg0ppa3stboLBLAzb2Q) 
+and extract to the root of the repo with:
+
+``tar -xzvf lightning_logs.tgz``
+
 This configuration achieves ~91.5% accuracy on the test set.
 
 The best checkpoint I've produced so far is:
 
-``lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt``
+``lightning_logs/version_1/checkpoints/kws-res-epoch10-val_acc0.92.ckpt``
 
 Not all training runs are the same, sometimes re-running will
 give slightly better / worse performance.
@@ -29,8 +34,8 @@ At minimum a machine with CUDA 11.x installed on the system.
 Run:
 
 ```bash
-conda env create -f environment.yml
-conda activate lc
+conda env create -f environment.yaml
+conda activate kws
 ```
 
 the first run of ``train`` and ``eval`` commands will download
@@ -47,7 +52,10 @@ python -m src.train
 ```
 
 NOTE: You'll need ~8GB VRAM to run with this config, if you run out of memory,
-try lowering ``batch_size`` in ``params.yaml``
+try lowering ``batch_size`` in ``params.yaml``.
+
+Metrics reported at the end of train are for the last checkpoint and not the best
+checkpoint, see the Evaluation section for steps on evaluating the best checkpoint.
 
 # Evaluation
 
@@ -59,7 +67,7 @@ python -m src.eval
 
 By default, this will find the checkpoint with best ``val_acc`` in the last version in
 ``lightning_logs``. For the zipped version of this project, it will use this checkpoint: 
-``lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt``
+``lightning_logs/version_1/checkpoints/kws-res-epoch10-val_acc0.92.ckpt``
 
 You should see output similar to this:
 
@@ -73,6 +81,14 @@ You should see output similar to this:
 ```
 
 Alternatively, use the ``-c`` argument to specify a path to another checkpoint.
+
+NOTE: If the train command was run before eval, it will use what ever the best
+saved checkpoint was for the last training run. To see metrics for my best 
+checkpoint, please manually specify the path with ``-c``.
+
+i.e.
+
+``src.eval -c lightning_logs/version_1/checkpoints/kws-res-epoch10-val_acc0.92.ckpt``
 
 ### Confusion Matrix for the above checkpoint:
 [<img src="confmat.png" width="1024"/>](./confmat.png)

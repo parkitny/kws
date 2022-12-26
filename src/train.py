@@ -30,16 +30,17 @@ def train():
     n_classes = len(labels)
     # Inject number of classes into the config, lets us train with other datasets if needed.
     params.model.n_classes = n_classes
+    params.model.labels = labels # Used for confusion matrix.
     model = ResNetMod(params.model)
 
     accelerator = C.CPU
     if params.train.device == C.CUDA:
         accelerator = C.GPU
         
-    early_stop = EarlyStopping(monitor="val_acc", min_delta=0.01, patience=10, verbose=False, mode="max")
+    early_stop = EarlyStopping(monitor="val_acc", min_delta=0.001, patience=10, verbose=False, mode="max")
     checkpoint_callback = ModelCheckpoint(
         monitor='val_loss',
-        filename='lc-challenge-epoch{epoch:02d}-val_acc{val_acc:.2f}',
+        filename='kws-res-epoch{epoch:02d}-val_acc{val_acc:.2f}',
         auto_insert_metric_name=False,
         save_top_k=3
     )

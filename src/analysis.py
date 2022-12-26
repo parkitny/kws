@@ -12,7 +12,7 @@ import src.constants as C
 # Alternatively, this can be specified in the param.yaml under train.n_classes
 def get_model(train_dataset, 
               params, 
-              ckpt_path='lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt'):
+              ckpt_path='lightning_logs/version_1/checkpoints/kws-res-epoch10-val_acc0.92.ckpt'):
     labels = sorted(list(set(datapoint[2] for datapoint in train_dataset)))
     n_classes = len(labels)
     params.model.n_classes = n_classes
@@ -25,7 +25,7 @@ def get_model(train_dataset,
 def get_incorrect_predictions(expected, 
                               predicted, 
                               split='test', 
-                              ckpt_path='lightning_logs/version_1/checkpoints/lc-challenge-epoch10-val_acc0.92.ckpt',
+                              ckpt_path='lightning_logs/version_1/checkpoints/kws-res-epoch10-val_acc0.92.ckpt',
                               params_fn='params.yaml',
                               data_path=C.DATA_PATH):
 
